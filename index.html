@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hangman</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===================== SCREEN 1: START ===================== -->
+  <div id="screen-start" class="screen active">
+    <div class="start-container">
+      <h1 class="logo">HANGMAN</h1>
+      <p class="tagline">Guess the word before it's too late</p>
+
+      <div class="difficulty-select">
+        <span class="diff-label">Difficulty</span>
+        <div class="diff-buttons">
+          <button class="diff-btn active" data-diff="easy">Easy</button>
+          <button class="diff-btn" data-diff="hard">Hard</button>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btn-start">New Game</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN 2: PLAYING ===================== -->
+  <div id="screen-game" class="screen">
+    <div class="game-container">
+
+      <header class="game-header">
+        <button class="btn-back" id="btn-back">&#8592; Menu</button>
+        <div class="lives">
+          <span class="lives-label">Lives</span>
+          <span class="lives-count" id="lives-count">6</span>
+        </div>
+      </header>
+
+      <!-- Hangman SVG drawing -->
+      <div class="gallows-wrap">
+        <svg id="hangman-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- Gallows structure (always visible) -->
+          <line x1="20" y1="190" x2="180" y2="190" stroke-width="4" stroke-linecap="round"/>
+          <line x1="60" y1="190" x2="60" y2="20"  stroke-width="4" stroke-linecap="round"/>
+          <line x1="60" y1="20"  x2="130" y2="20"  stroke-width="4" stroke-linecap="round"/>
+          <line x1="130" y1="20" x2="130" y2="45"  stroke-width="4" stroke-linecap="round"/>
+          <!-- Body parts — hidden by default, revealed on wrong guesses -->
+          <circle id="h-head"  cx="130" cy="60"  r="15" fill="none" stroke-width="3" class="body-part hidden"/>
+          <line   id="h-body"  x1="130" y1="75"  x2="130" y2="120" stroke-width="3" stroke-linecap="round" class="body-part hidden"/>
+          <line   id="h-arm-l" x1="130" y1="90"  x2="105" y2="110" stroke-width="3" stroke-linecap="round" class="body-part hidden"/>
+          <line   id="h-arm-r" x1="130" y1="90"  x2="155" y2="110" stroke-width="3" stroke-linecap="round" class="body-part hidden"/>
+          <line   id="h-leg-l" x1="130" y1="120" x2="105" y2="150" stroke-width="3" stroke-linecap="round" class="body-part hidden"/>
+          <line   id="h-leg-r" x1="130" y1="120" x2="155" y2="150" stroke-width="3" stroke-linecap="round" class="body-part hidden"/>
+        </svg>
+      </div>
+
+      <!-- Word display -->
+      <div class="word-display" id="word-display">
+        <!-- Populated by JS — dummy data shown for now -->
+        <span class="letter">H</span>
+        <span class="letter blank">_</span>
+        <span class="letter blank">_</span>
+        <span class="letter blank">_</span>
+        <span class="letter blank">_</span>
+        <span class="letter blank">_</span>
+      </div>
+
+      <!-- Wrong guesses list -->
+      <div class="wrong-guesses">
+        <span class="wrong-label">Wrong:</span>
+        <span class="wrong-letters" id="wrong-letters">C, X</span>
+      </div>
+
+      <!-- Keyboard -->
+      <div class="keyboard" id="keyboard">
+        <!-- Populated by JS — dummy buttons shown for now -->
+        <button class="key" data-letter="A">A</button>
+        <button class="key" data-letter="B">B</button>
+        <button class="key wrong" data-letter="C" disabled>C</button>
+        <button class="key" data-letter="D">D</button>
+        <button class="key" data-letter="E">E</button>
+        <button class="key" data-letter="F">F</button>
+        <button class="key" data-letter="G">G</button>
+        <button class="key correct" data-letter="H" disabled>H</button>
+        <button class="key" data-letter="I">I</button>
+        <button class="key" data-letter="J">J</button>
+        <button class="key" data-letter="K">K</button>
+        <button class="key" data-letter="L">L</button>
+        <button class="key" data-letter="M">M</button>
+        <button class="key" data-letter="N">N</button>
+        <button class="key" data-letter="O">O</button>
+        <button class="key" data-letter="P">P</button>
+        <button class="key" data-letter="Q">Q</button>
+        <button class="key" data-letter="R">R</button>
+        <button class="key" data-letter="S">S</button>
+        <button class="key" data-letter="T">T</button>
+        <button class="key" data-letter="U">U</button>
+        <button class="key" data-letter="V">V</button>
+        <button class="key" data-letter="W">W</button>
+        <button class="key wrong" data-letter="X" disabled>X</button>
+        <button class="key" data-letter="Y">Y</button>
+        <button class="key" data-letter="Z">Z</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN 3: GAME OVER / WIN ===================== -->
+  <div id="screen-end" class="screen">
+    <div class="end-container">
+
+      <!-- Badge — swap class between "badge-win" and "badge-lose" -->
+      <span class="badge badge-lose" id="end-badge">Game Over</span>
+
+      <p class="end-msg" id="end-msg">The word was</p>
+      <p class="end-word" id="end-word">HOUSE</p>
+
+      <button class="btn-primary" id="btn-again">Play Again</button>
+      <button class="btn-secondary" id="btn-menu">Back to Menu</button>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
