@@ -5,8 +5,41 @@ const path = require("path");
 const PORT = 3000;
 
 // ── Word lists ────────────────────────────────────────────
-const WORDS_EASY = ["CAT", "DOG", "SUN", "HAT", "BUS", "CUP", "MAP", "JAR", "PEN", "BOX"];
-const WORDS_HARD = ["JUNGLE", "PYRAMID", "WHISPER", "BLANKET", "CACTUS", "FROZEN", "MYSTERY", "LANTERN", "BLOSSOM", "GRAVITY"];
+const WORDS_EASY = [
+  { word: "CAT",    category: "Animals" },
+  { word: "DOG",    category: "Animals" },
+  { word: "SUN",    category: "Nature"  },
+  { word: "HAT",    category: "Clothing" },
+  { word: "BUS",    category: "Transport" },
+  { word: "CUP",    category: "Objects" },
+  { word: "MAP",    category: "Objects" },
+  { word: "JAR",    category: "Objects" },
+  { word: "PEN",    category: "Objects" },
+  { word: "BOX",    category: "Objects" },
+  { word: "FISH",   category: "Animals" },
+  { word: "FROG",   category: "Animals" },
+  { word: "CAKE",   category: "Food"    },
+  { word: "RAIN",   category: "Nature"  },
+  { word: "BOOK",   category: "Objects" },
+];
+
+const WORDS_HARD = [
+  { word: "JUNGLE",   category: "Nature"    },
+  { word: "PYRAMID",  category: "History"   },
+  { word: "WHISPER",  category: "Actions"   },
+  { word: "BLANKET",  category: "Objects"   },
+  { word: "CACTUS",   category: "Nature"    },
+  { word: "FROZEN",   category: "Weather"   },
+  { word: "MYSTERY",  category: "Concepts"  },
+  { word: "LANTERN",  category: "Objects"   },
+  { word: "BLOSSOM",  category: "Nature"    },
+  { word: "GRAVITY",  category: "Science"   },
+  { word: "TRUMPET",  category: "Music"     },
+  { word: "GLACIER",  category: "Nature"    },
+  { word: "PHANTOM",  category: "Concepts"  },
+  { word: "ECLIPSE",  category: "Science"   },
+  { word: "COMPASS",  category: "Objects"   },
+];
 
 function pickWord(difficulty) {
   const list = difficulty === "hard" ? WORDS_HARD : WORDS_EASY;
@@ -31,10 +64,10 @@ const server = http.createServer((req, res) => {
   if (req.url.startsWith("/word")) {
     const params     = new URL(req.url, `http://localhost:${PORT}`).searchParams;
     const difficulty = params.get("difficulty") || "easy";
-    const word       = pickWord(difficulty);
+    const entry      = pickWord(difficulty);
 
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ word }));
+    res.end(JSON.stringify({ word: entry.word, category: entry.category }));
     return;
   }
 

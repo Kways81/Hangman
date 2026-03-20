@@ -24,6 +24,19 @@
         </div>
       </div>
 
+      <!-- Score display -->
+      <div class="score-board">
+        <div class="score-item">
+          <span class="score-label">Wins</span>
+          <span class="score-value wins" id="score-wins">0</span>
+        </div>
+        <div class="score-divider"></div>
+        <div class="score-item">
+          <span class="score-label">Losses</span>
+          <span class="score-value losses" id="score-losses">0</span>
+        </div>
+      </div>
+
       <button class="btn-primary" id="btn-start">New Game</button>
     </div>
   </div>
@@ -39,6 +52,12 @@
           <span class="lives-count" id="lives-count">6</span>
         </div>
       </header>
+
+      <!-- Hint / category -->
+      <div class="hint-bar">
+        <span class="hint-label">Category:</span>
+        <span class="hint-value" id="hint-value">—</span>
+      </div>
 
       <!-- Hangman SVG drawing -->
       <div class="gallows-wrap">
@@ -121,6 +140,10 @@
 
       <button class="btn-primary" id="btn-again">Play Again</button>
       <button class="btn-secondary" id="btn-menu">Back to Menu</button>
+
+      <div class="end-score">
+        <span id="end-score-wins">0</span> wins &nbsp;/&nbsp; <span id="end-score-losses">0</span> losses
+      </div>
 
     </div>
   </div>

@@ -312,7 +312,73 @@ html, body {
   border-color: var(--muted);
 }
 
-/* ── Mobile tweaks ────────────────────────────── */
+/* ── Score board (start screen) ──────────────────────────── */
+.score-board {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px 28px;
+}
+
+.score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.score-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+}
+
+.score-value {
+  font-family: var(--font-display);
+  font-size: 28px;
+}
+
+.score-value.wins   { color: var(--correct); }
+.score-value.losses { color: var(--wrong);   }
+
+.score-divider {
+  width: 1px;
+  height: 36px;
+  background: var(--border);
+}
+
+/* ── Hint bar (game screen) ───────────────────────────────── */
+.hint-bar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.hint-label {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 11px;
+}
+
+.hint-value {
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 13px;
+}
+
+/* ── End score (end screen) ───────────────────────────────── */
+.end-score {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+.end-score span { color: var(--text); font-family: var(--font-display); }
 @media (max-width: 360px) {
   .keyboard { grid-template-columns: repeat(6, 1fr); }
   .key { font-size: 11px; }

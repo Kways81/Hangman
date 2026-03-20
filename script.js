@@ -3,9 +3,12 @@
 
 // ── Game state ────────────────────────────────────────────
 let word = "";
+let category = "";
 let guessed = new Set();
 let lives = 6;
 let difficulty = "easy";
+let wins = 0;
+let losses = 0;
 
 // ── Body parts revealed in order as lives are lost ────────
 const BODY_PARTS = ["h-head", "h-body", "h-arm-l", "h-arm-r", "h-leg-l", "h-leg-r"];
@@ -28,10 +31,13 @@ function showScreen(name) {
 async function startGame() {
   const res  = await fetch(`/word?difficulty=${difficulty}`);
   const data = await res.json();
-  word = data.word;
+  word     = data.word;
+  category = data.category;
 
   guessed = new Set();
   lives = 6;
+
+  document.getElementById("hint-value").textContent = category;
 
   updateLivesDisplay();
   updateWordDisplay();
@@ -140,16 +146,24 @@ function endGame(won) {
   const msg     = document.getElementById("end-msg");
   const endWord = document.getElementById("end-word");
 
-  endWord.textContent = word;
-  msg.textContent = "The word was";
-
   if (won) {
+    wins++;
     badge.textContent = "You win!";
     badge.className = "badge badge-win";
   } else {
+    losses++;
     badge.textContent = "Game Over";
     badge.className = "badge badge-lose";
   }
+
+  endWord.textContent = word;
+  msg.textContent = "The word was";
+
+  // Update score on start screen and end screen
+  document.getElementById("score-wins").textContent    = wins;
+  document.getElementById("score-losses").textContent  = losses;
+  document.getElementById("end-score-wins").textContent   = wins;
+  document.getElementById("end-score-losses").textContent = losses;
 
   showScreen("end");
 }
