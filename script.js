@@ -1,7 +1,5 @@
-// ── Word list ─────────────────────────────────────────────
-// Later we'll replace this with a fetch() call to the Node server
-const WORDS_EASY = ["CAT", "DOG", "SUN", "HAT", "BUS", "CUP", "MAP", "JAR", "PEN", "BOX"];
-const WORDS_HARD = ["JUNGLE", "PYRAMID", "WHISPER", "BLANKET", "CACTUS", "FROZEN", "MYSTERY", "LANTERN", "BLOSSOM", "GRAVITY"];
+// ── Word fetching ─────────────────────────────────────────
+// Fetches a random word from the Node server
 
 // ── Game state ────────────────────────────────────────────
 let word = "";
@@ -25,15 +23,13 @@ function showScreen(name) {
   screens[name].classList.add("active");
 }
 
-// ── Pick a random word from the right list ────────────────
-function pickWord() {
-  const list = difficulty === "easy" ? WORDS_EASY : WORDS_HARD;
-  return list[Math.floor(Math.random() * list.length)];
-}
-
 // ── Start a new game ──────────────────────────────────────
-function startGame() {
-  word = pickWord();
+// async because we fetch the word from the server
+async function startGame() {
+  const res  = await fetch(`/word?difficulty=${difficulty}`);
+  const data = await res.json();
+  word = data.word;
+
   guessed = new Set();
   lives = 6;
 
