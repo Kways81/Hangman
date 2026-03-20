@@ -94,31 +94,78 @@ function resetHangman() {
   });
 }
 
-// ── Build the A–Z keyboard ────────────────────────────────
-function buildKeyboard() {
-  const keyboard = document.getElementById("keyboard");
-  keyboard.innerHTML = "";
+// ── Hangman Keyboard — Custom Element ────────────────────
+// Uses all three web component features:
+//   1. <template>  — the keyboard HTML lives in index.html as a template
+//   2. Shadow DOM  — styles are scoped inside the component
+//   3. Custom Element — registered as <hangman-keyboard>
 
-  for (let i = 65; i <= 90; i++) {
-    const letter = String.fromCharCode(i);
-    const btn = document.createElement("button");
-    btn.classList.add("key");
-    btn.textContent = letter;
-    btn.dataset.letter = letter;
-    btn.addEventListener("click", () => handleGuess(letter, btn));
-    keyboard.appendChild(btn);
+class HangmanKeyboard extends HTMLElement {
+  connectedCallback() {
+    // 1. Clone the template content
+    const template = document.getElementById("keyboard-template");
+    const shadow   = this.attachShadow({ mode: "open" });
+    shadow.appendChild(template.content.cloneNode(true));
+
+    // 2. Build the A–Z buttons inside the shadow DOM
+    const grid = shadow.querySelector(".grid");
+    for (let i = 65; i <= 90; i++) {
+      const letter = String.fromCharCode(i);
+      const btn    = document.createElement("button");
+      btn.textContent    = letter;
+      btn.dataset.letter = letter;
+
+      // 3. Fire a custom event when a key is clicked
+      // script.js listens for this — the component doesn't need to know about game logic
+      btn.addEventListener("click", () => {
+        btn.disabled = true;
+        this.dispatchEvent(new CustomEvent("letter-guessed", {
+          detail: { letter },
+          bubbles: true,
+        }));
+      });
+
+      grid.appendChild(btn);
+    }
+  }
+
+  // Mark a key as correct or wrong from outside the component
+  markKey(letter, result) {
+    const shadow = this.shadowRoot;
+    const btn = [...shadow.querySelectorAll("button")]
+      .find(b => b.dataset.letter === letter);
+    if (btn) {
+      btn.classList.add(result); // "correct" or "wrong"
+      btn.disabled = true;
+    }
+  }
+
+  // Reset all keys for a new game
+  reset() {
+    const shadow = this.shadowRoot;
+    shadow.querySelectorAll("button").forEach(btn => {
+      btn.classList.remove("correct", "wrong");
+      btn.disabled = false;
+    });
   }
 }
 
+customElements.define("hangman-keyboard", HangmanKeyboard);
+
+// ── Build the keyboard — now just calls reset() on the component ──
+function buildKeyboard() {
+  document.getElementById("keyboard").reset();
+}
+
 // ── Handle a letter guess ─────────────────────────────────
-function handleGuess(letter, btn) {
+function handleGuess(letter) {
   guessed.add(letter);
-  btn.disabled = true;
+  const keyboard = document.getElementById("keyboard");
 
   if (word.includes(letter)) {
-    btn.classList.add("correct");
+    keyboard.markKey(letter, "correct");
   } else {
-    btn.classList.add("wrong");
+    keyboard.markKey(letter, "wrong");
     lives--;
     updateLivesDisplay();
     revealNextBodyPart();
@@ -128,6 +175,11 @@ function handleGuess(letter, btn) {
   updateWrongLetters();
   checkEndCondition();
 }
+
+// Listen for the custom event fired by <hangman-keyboard>
+document.getElementById("keyboard").addEventListener("letter-guessed", (e) => {
+  handleGuess(e.detail.letter);
+});
 
 // ── Check if the game is won or lost ─────────────────────
 function checkEndCondition() {
