@@ -157,6 +157,10 @@
         opacity: 0.5;
       }
       button:disabled { cursor: default; }
+      @media (max-width: 360px) {
+        .grid { grid-template-columns: repeat(6, 1fr); }
+        button { font-size: 11px; padding: 8px 0; }
+      }
     </style>
     <div class="grid"></div>
   </template>

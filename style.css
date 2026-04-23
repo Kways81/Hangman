@@ -145,7 +145,7 @@ html, body {
 
 /* Gallows */
 .gallows-wrap {
-  width: 180px;
+  width: min(180px, 45vw);
 }
 
 #hangman-svg {
@@ -380,6 +380,6 @@ html, body {
 
 .end-score span { color: var(--text); font-family: var(--font-display); }
 @media (max-width: 360px) {
-  .keyboard { grid-template-columns: repeat(6, 1fr); }
-  .key { font-size: 11px; }
+  .game-container { gap: 12px; }
+  .letter { font-size: 20px; min-width: 22px; }
 }

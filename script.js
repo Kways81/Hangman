@@ -10,6 +10,25 @@ let difficulty = "easy";
 let wins = 0;
 let losses = 0;
 
+async function loadScores() {
+  const res = await fetch("/score");
+  const data = await res.json();
+  wins = data.wins;
+  losses = data.losses;
+  document.getElementById("score-wins").textContent = wins;
+  document.getElementById("score-losses").textContent = losses;
+}
+
+async function saveScores() {
+  await fetch("/score", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ wins, losses }),
+  });
+}
+
+loadScores();
+
 // ── Body parts revealed in order as lives are lost ────────
 const BODY_PARTS = ["h-head", "h-body", "h-arm-l", "h-arm-r", "h-leg-l", "h-leg-r"];
 
@@ -217,6 +236,7 @@ function endGame(won) {
   document.getElementById("end-score-wins").textContent   = wins;
   document.getElementById("end-score-losses").textContent = losses;
 
+  saveScores();
   showScreen("end");
 }
 
@@ -242,3 +262,12 @@ document.getElementById("btn-again").addEventListener("click", startGame);
 
 // Back to menu from end screen
 document.getElementById("btn-menu").addEventListener("click", () => showScreen("start"));
+
+// Physical keyboard input — only active during gameplay
+document.addEventListener("keydown", (e) => {
+  if (screens.game.classList.contains("active") === false) return;
+  const letter = e.key.toUpperCase();
+  if (letter.length !== 1 || letter < "A" || letter > "Z") return;
+  if (guessed.has(letter)) return;
+  handleGuess(letter);
+});
