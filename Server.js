@@ -111,8 +111,62 @@ const WORDS_HARD = [
   { word: "EXPEDITION",  category: "Concepts"  },
 ];
 
+const WORDS_EXTREME = [
+  { word: "PSYCHEDELIC",     category: "Concepts"  },
+  { word: "MISCREANT",       category: "Concepts"  },
+  { word: "SYCOPHANT",       category: "Concepts"  },
+  { word: "JUXTAPOSITION",   category: "Concepts"  },
+  { word: "EPHEMERAL",       category: "Concepts"  },
+  { word: "QUINTESSENTIAL",  category: "Concepts"  },
+  { word: "NEFARIOUS",       category: "Concepts"  },
+  { word: "OBFUSCATE",       category: "Concepts"  },
+  { word: "PERSPICACIOUS",   category: "Concepts"  },
+  { word: "LOQUACIOUS",      category: "Concepts"  },
+  { word: "MELLIFLUOUS",     category: "Concepts"  },
+  { word: "PUSILLANIMOUS",   category: "Concepts"  },
+  { word: "MAGNANIMOUS",     category: "Concepts"  },
+  { word: "FLABBERGASTED",   category: "Emotions"  },
+  { word: "DISCOMBOBULATE",  category: "Actions"   },
+  { word: "KERFUFFLE",       category: "Concepts"  },
+  { word: "SHENANIGANS",     category: "Concepts"  },
+  { word: "BAMBOOZLE",       category: "Actions"   },
+  { word: "HULLABALOO",      category: "Concepts"  },
+  { word: "BROUHAHA",        category: "Concepts"  },
+  { word: "HIGGLEDY",        category: "Concepts"  },
+  { word: "TCHOTCHKE",       category: "Objects"   },
+  { word: "DEFENESTRATE",    category: "Actions"   },
+  { word: "CALLIPYGIAN",     category: "Concepts"  },
+  { word: "ONOMATOPOEIA",    category: "Language"  },
+  { word: "ANTIDISESTABLISH", category: "Language" },
+  { word: "PNEUMONOULTRAMICROSCOPIC", category: "Science" },
+  { word: "HIPPOPOTOMONSTROUS", category: "Concepts" },
+  { word: "FLOCCINAUCINIHILIPILIFICATION", category: "Language" },
+  { word: "SUPERCALIFRAGILISTIC", category: "Concepts" },
+  { word: "VERISIMILITUDE",  category: "Language"  },
+  { word: "SCHADENFREUDE",   category: "Emotions"  },
+  { word: "WELTANSCHAUUNG",  category: "Concepts"  },
+  { word: "ZEITGEIST",       category: "Concepts"  },
+  { word: "POLTERGEIST",     category: "Concepts"  },
+  { word: "PRESTIDIGITATION", category: "Actions"  },
+  { word: "LIMERENCE",       category: "Emotions"  },
+  { word: "SOLIPSISM",       category: "Concepts"  },
+  { word: "PAREIDOLIA",      category: "Science"   },
+  { word: "PETRICHOR",       category: "Nature"    },
+  { word: "PHOSPHORESCENT",  category: "Science"   },
+  { word: "BIOLUMINESCENCE", category: "Science"   },
+  { word: "CONCATENATION",   category: "Science"   },
+  { word: "SYNECDOCHE",      category: "Language"  },
+  { word: "PLEONASM",        category: "Language"  },
+  { word: "OXYMORON",        category: "Language"  },
+  { word: "SESQUIPEDALIAN",  category: "Language"  },
+  { word: "TINTINNABULATION", category: "Music"    },
+  { word: "BORBORYGMUS",     category: "Science"   },
+  { word: "CALLITHUMPIAN",   category: "Concepts"  },
+];
+
 function pickWord(difficulty) {
-  const list = difficulty === "hard" ? WORDS_HARD : WORDS_EASY;
+  const lists = { easy: WORDS_EASY, hard: WORDS_HARD, extreme: WORDS_EXTREME };
+  const list = lists[difficulty] || WORDS_EASY;
   return list[Math.floor(Math.random() * list.length)];
 }
 
