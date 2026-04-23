@@ -93,6 +93,17 @@ html, body {
   color: var(--accent);
 }
 
+.diff-btn.diff-extreme {
+  border-color: #8b0000;
+  color: #e05252;
+}
+
+.diff-btn.diff-extreme.active {
+  border-color: var(--wrong);
+  color: var(--wrong);
+  background: rgba(224, 82, 82, 0.1);
+}
+
 /* ── SCREEN 2: Game ───────────────────────────── */
 #screen-game {
   justify-content: flex-start;
