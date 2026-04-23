@@ -30,7 +30,7 @@ async function saveScores() {
 loadScores();
 
 // ── Timer ─────────────────────────────────────────────────
-const TIMER_START = 150; // 2 minutes 30 seconds
+const TIMER_START = 90; // 1 minute 30 seconds
 let timerSeconds = TIMER_START;
 let timerInterval = null;
 
