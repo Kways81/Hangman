@@ -143,6 +143,18 @@ html, body {
   color: var(--wrong);
 }
 
+/* Timer */
+.timer {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--accent);
+  letter-spacing: 2px;
+}
+
+.timer.timer-warning {
+  color: var(--wrong);
+}
+
 /* Gallows */
 .gallows-wrap {
   width: min(180px, 45vw);

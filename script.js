@@ -29,6 +29,37 @@ async function saveScores() {
 
 loadScores();
 
+// ── Timer ─────────────────────────────────────────────────
+const TIMER_START = 150; // 2 minutes 30 seconds
+let timerSeconds = TIMER_START;
+let timerInterval = null;
+
+function startTimer() {
+  timerSeconds = TIMER_START;
+  updateTimerDisplay();
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timerSeconds--;
+    updateTimerDisplay();
+    if (timerSeconds <= 0) {
+      clearInterval(timerInterval);
+      endGame(false);
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+function updateTimerDisplay() {
+  const mins = Math.floor(timerSeconds / 60);
+  const secs = timerSeconds % 60;
+  const el = document.getElementById("timer");
+  el.textContent = `${mins}:${secs.toString().padStart(2, "0")}`;
+  el.classList.toggle("timer-warning", timerSeconds <= 30);
+}
+
 // ── Body parts revealed in order as lives are lost ────────
 const BODY_PARTS = ["h-head", "h-body", "h-arm-l", "h-arm-r", "h-leg-l", "h-leg-r"];
 
@@ -63,6 +94,7 @@ async function startGame() {
   updateWrongLetters();
   resetHangman();
   buildKeyboard();
+  startTimer();
 
   showScreen("game");
 }
@@ -236,6 +268,7 @@ function endGame(won) {
   document.getElementById("end-score-wins").textContent   = wins;
   document.getElementById("end-score-losses").textContent = losses;
 
+  stopTimer();
   saveScores();
   showScreen("end");
 }
@@ -255,7 +288,7 @@ document.querySelectorAll(".diff-btn").forEach(btn => {
 document.getElementById("btn-start").addEventListener("click", startGame);
 
 // Back to menu from game screen
-document.getElementById("btn-back").addEventListener("click", () => showScreen("start"));
+document.getElementById("btn-back").addEventListener("click", () => { stopTimer(); showScreen("start"); });
 
 // Play again from end screen
 document.getElementById("btn-again").addEventListener("click", startGame);
